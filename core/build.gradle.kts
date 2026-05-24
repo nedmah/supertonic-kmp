@@ -4,7 +4,11 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidMultiplatformLibrary)
     alias(libs.plugins.kotlinSerialization)
+    `maven-publish`
 }
+
+group = "io.github.nedmah"
+version = "0.1.0"
 
 kotlin {
     listOf(
@@ -48,6 +52,21 @@ kotlin {
     }
 }
 
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/nedmah/supertonic-kmp")
+            credentials {
+                username = providers.gradleProperty("gpr.user").orNull
+                    ?: System.getenv("GITHUB_ACTOR")
+                password = providers.gradleProperty("gpr.token").orNull
+                    ?: System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+}
+
 // Copy commonMain resources into the iOS framework bundle
 val copyResourcesToFramework by tasks.registering {
     notCompatibleWithConfigurationCache("Copies resources to iOS framework")
@@ -73,8 +92,4 @@ val copyResourcesToFramework by tasks.registering {
 
 tasks.matching { it.name.contains("linkDebugFrameworkIos") || it.name.contains("linkReleaseFrameworkIos") }.configureEach {
     finalizedBy(copyResourcesToFramework)
-}
-
-dependencies {
-    androidRuntimeClasspath(libs.compose.uiTooling)
 }
