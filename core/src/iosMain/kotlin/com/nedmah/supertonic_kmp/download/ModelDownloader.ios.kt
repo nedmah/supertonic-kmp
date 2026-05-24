@@ -41,7 +41,7 @@ internal actual class ModelDownloader actual constructor(
         fm.createDirectoryAtURL(dirUrl, withIntermediateDirectories = true, attributes = null, error = null)
         fm.removeItemAtPath("$storageDir/$COMPLETE_MARKER", error = null)
 
-        // Phase 1 — HEAD all files to calculate totalBytes for progress
+        // HEAD all files to calculate totalBytes for progress
         val fileSizes = try {
             files.associateWith { path -> headContentLength(fileUrl(path)) }
         } catch (e: Exception) {

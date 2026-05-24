@@ -53,6 +53,9 @@ kotlin {
 }
 
 publishing {
+    publications.withType<MavenPublication> {
+        artifactId = artifactId.replace("core", "supertonic-kmp")
+    }
     repositories {
         maven {
             name = "GitHubPackages"

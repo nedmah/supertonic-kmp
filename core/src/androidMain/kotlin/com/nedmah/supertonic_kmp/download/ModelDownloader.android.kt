@@ -60,7 +60,7 @@ internal actual class ModelDownloader actual constructor(
             }
 
             if (expectedSize == -1L && existingSize > 0) {
-                // Content-Length unavailable (e.g. chunked response) — trust existing file
+                // Content-Length unavailable (e.g. chunked response) trust existing file
                 globalDownloaded += existingSize
                 emit(DownloadState.Downloading(globalDownloaded, totalBytes))
                 continue

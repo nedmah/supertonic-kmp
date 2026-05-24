@@ -30,6 +30,65 @@ This library fills that gap: a minimal, idiomatic KMP wrapper that exposes Super
 
 ---
 
+## Installation
+
+The library is published to GitHub Packages.
+
+### 1. Add the repository
+
+In your root `settings.gradle.kts`:
+
+```kotlin
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+        maven {
+            url = uri("https://maven.pkg.github.com/nedmah/supertonic-kmp")
+            credentials {
+                username = providers.gradleProperty("gpr.user").orNull
+                    ?: System.getenv("GITHUB_ACTOR")
+                password = providers.gradleProperty("gpr.token").orNull
+                    ?: System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+}
+```
+
+GitHub Packages requires authentication even for public packages. Add your credentials to `~/.gradle/gradle.properties` (never commit this file):
+
+```properties
+gpr.user=YOUR_GITHUB_USERNAME
+gpr.token=YOUR_GITHUB_TOKEN
+```
+
+Generate a token at **GitHub → Settings → Developer settings → Personal access tokens** with the `read:packages` scope.
+
+### 2. Add the dependency
+
+In your shared module's `build.gradle.kts`:
+
+```kotlin
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            implementation("io.github.nedmah:supertonic-kmp:0.1.0")
+        }
+    }
+}
+```
+
+### 3. iOS — add ONNX Runtime via Swift Package Manager
+
+In Xcode: **File → Add Package Dependencies**
+- **URL**: `https://github.com/microsoft/onnxruntime-swift-package-manager`
+- **Version**: `1.20.0+`
+- **Product**: `OnnxRuntimeBindings`
+  See the [iOS integration](#ios-integration) section below for the remaining setup steps.
+
+---
+
 ## Quick start
 
 ```kotlin
